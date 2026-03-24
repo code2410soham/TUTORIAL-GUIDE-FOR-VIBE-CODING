@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCoding - Pro Recommendations</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo" style="text-decoration: none;">✨ <span class="gradient-text">VibeCoding</span> Guide</a>
+            <nav>
+                <a href="tutorial.html">Web Course</a>
+                <a href="git-course.html">Git Course</a>
+                <a href="quiz.html">Take Quiz</a>
+                <a href="recommendations.html" style="color: var(--accent); font-weight: 700;">Recommendations</a>
+                <button id="theme-toggle" class="theme-btn">🌓 Toggle</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="landing-main">
+        <div class="hero-section">
+            <h1 class="hero-title">Pro <span class="gradient-text">Recommendations</span></h1>
+            <p class="hero-subtitle">My curated toolkit to accelerate your journey from absolute beginner to a hired Full-Stack Developer.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🖥️ Core VibeCoding Software</h3>
+                <p><strong>Antigravity:</strong> The AI-first IDE you are using right now. It writes boilerplate, fixes bugs instantly, and allows you to "vibe" code into existence using pure English.</p>
+                <p style="margin-top:0.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem;"><strong>VS Code:</strong> The global industry standard for traditional coding when you need to jump deeply into the raw logic.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🚀 Ultimate Hosting Platforms</h3>
+                <p><strong>Vercel:</strong> The absolute best place to host modern frontend apps (React, Next.js, HTML) instantly for free by connecting your GitHub repo.</p>
+                <p style="margin-top:0.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem;"><strong>Railway:</strong> The easiest platform to host backend Node.js servers and full PostgreSQL databases automatically without manually configuring complex AWS servers.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🎨 Design & UI Assets</h3>
+                <p><strong>Figma:</strong> Never guess how a site looks. Draw it in Figma first for free before you start coding to ensure the visual hierarchy is perfect.</p>
+                <p style="margin-top:0.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem;"><strong>Google Fonts & FontAwesome:</strong> Access thousands of professional typefaces and vector icons completely free to make your UI look premium.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>🗄️ Database Solutions</h3>
+                <p><strong>Supabase:</strong> An incredible open-source alternative to Firebase. It gives you a strict PostgreSQL database and built-in user authentication perfectly out of the box.</p>
+                <p style="margin-top:0.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem;"><strong>MongoDB Atlas:</strong> The definitive standard for hosting NoSQL document databases seamlessly and easily.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>📚 Continuous Master Learning</h3>
+                <p><strong>MDN Web Docs:</strong> The absolute definitive dictionary for HTML, CSS, and JS. Owned by Mozilla, it's essentially the Wikipedia for web developers.</p>
+                <p style="margin-top:0.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem;"><strong>Frontend Mentor:</strong> Once you finish this course, go here to download real-world mockups and try coding exactly what you see.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>🛠️ Browser DevTools</h3>
+                <p><strong>Chrome Developer Tools:</strong> Press <code>F12</code> in Chrome. This is your greatest weapon. You can edit live CSS directly on the page, view console logic errors precisely, and measure network API speeds.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with ❤️ and Antigravity</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeBtn = document.getElementById('theme-toggle');
+            if (themeBtn) {
+                if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
+                themeBtn.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-theme');
+                    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
