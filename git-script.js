@@ -230,19 +230,41 @@ git config --global user.email "you@example.com"</code></pre>
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 🌓 Theme Logic
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn) {
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-theme');
-        }
+        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
         themeBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-theme');
             localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
         });
     }
 
+    // 📱 Mobile Hamburger Logic
+    const hamburger = document.createElement('button');
+    hamburger.className = 'hamburger';
+    hamburger.innerHTML = '<span></span><span></span><span></span>';
+    document.querySelector('.header-content').appendChild(hamburger);
+
+    const nav = document.querySelector('header nav');
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        hamburger.classList.toggle('open');
+    });
+
+    // 📋 Progress Tracker Logic
     const tocItems = document.querySelectorAll('#toc li');
     const contentDiv = document.getElementById('content');
+    let completedGitChapters = JSON.parse(localStorage.getItem('completed_git_chapters') || '[]');
+
+    function updateProgressUI() {
+        tocItems.forEach(item => {
+            const id = item.getAttribute('data-target');
+            if (completedGitChapters.includes(id)) {
+                item.classList.add('completed');
+            }
+        });
+    }
 
     function loadChapter(chapterId) {
         if (chapters[chapterId] && contentDiv) {
@@ -251,11 +273,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 contentDiv.innerHTML = chapters[chapterId];
                 contentDiv.style.transition = 'opacity 0.3s ease';
                 contentDiv.style.opacity = 1;
+                
+                // Track progress
+                if (!completedGitChapters.includes(chapterId)) {
+                    completedGitChapters.push(chapterId);
+                    localStorage.setItem('completed_git_chapters', JSON.stringify(completedGitChapters));
+                    updateProgressUI();
+                }
+                
+                // Wrap code blocks & add copy buttons
+                const codes = contentDiv.querySelectorAll('pre');
+                codes.forEach(pre => {
+                    if (!pre.parentElement.classList.contains('code-wrapper')) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'code-wrapper';
+                        pre.parentNode.insertBefore(wrapper, pre);
+                        wrapper.appendChild(pre);
+
+                        const copyBtn = document.createElement('button');
+                        copyBtn.className = 'copy-btn';
+                        copyBtn.innerText = 'Copy';
+                        wrapper.appendChild(copyBtn);
+
+                        copyBtn.addEventListener('click', () => {
+                            navigator.clipboard.writeText(pre.innerText).then(() => {
+                                copyBtn.innerText = 'Copied!';
+                                copyBtn.classList.add('copied');
+                                setTimeout(() => {
+                                    copyBtn.innerText = 'Copy';
+                                    copyBtn.classList.remove('copied');
+                                }, 2000);
+                            });
+                        });
+                    }
+                });
             }, 100);
 
             tocItems.forEach(item => item.classList.remove('active'));
             const activeItem = document.querySelector('#toc li[data-target="' + chapterId + '"]');
             if (activeItem) activeItem.classList.add('active');
+            
+            // Auto close mobile menu
+            nav.classList.remove('active');
+            hamburger.classList.remove('open');
         }
     }
 
@@ -263,8 +323,46 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', () => {
             const target = item.getAttribute('data-target');
             loadChapter(target);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
 
-    loadChapter('git_intro');
+    if (contentDiv) {
+        loadChapter('git_intro');
+        updateProgressUI();
+    }
+
+    // 🚀 Back to Top
+    const btt = document.createElement('button');
+    btt.id = 'back-to-top';
+    btt.innerHTML = '↑';
+    document.body.appendChild(btt);
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btt.style.display = 'flex';
+        } else {
+            btt.style.display = 'none';
+        }
+    });
+
+    btt.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 🔍 Sidebar Search Logic
+    const searchInput = document.getElementById('chapter-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            tocItems.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(term)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
 });
